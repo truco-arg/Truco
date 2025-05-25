@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cómo jugar al Truco Argentino</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0275d8;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #0275d8;
+    }
+
+    .counter {
+      margin-top: 30px;
+      background: #e9f5ff;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .counter h3 {
+      margin-bottom: 10px;
+    }
+
+    .counter button {
+      font-size: 16px;
+      margin: 5px;
+      padding: 10px 15px;
+    }
+
+    .team {
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .team h4 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Cómo jugar al Truco Argentino</h1>
+  <p>Guía completa para principiantes</p>
+</header>
+
+<main>
+
+  <h2>¿Qué es el Truco?</h2>
+  <p>El Truco argentino es un juego de cartas tradicional que se juega con una baraja española de 40 cartas (sin 8 y 9). Es popular en Argentina, Uruguay y parte de Brasil.</p>
+
+  <h2>Jugadores y Objetivo</h2>
+  <p>Se juega entre 2 a 6 jugadores. El objetivo es sumar 30 puntos antes que el rival, ganando manos mediante estrategia, engaño y canto de jugadas como Truco, Envido y Flor.</p>
+
+  <h2>Fases del juego</h2>
+  <ul>
+    <li><strong>Reparto:</strong> Se reparten 3 cartas a cada jugador.</li>
+    <li><strong>Envido:</strong> Se canta para competir por puntos según el valor combinado de dos cartas del mismo palo.</li>
+    <li><strong>Truco:</strong> Se canta para desafiar la ronda y obtener más puntos si se gana.</li>
+    <li><strong>Flor:</strong> Jugada especial cuando un jugador tiene tres cartas del mismo palo (vale 3 puntos o más).</li>
+    <li><strong>Mano:</strong> Se juega carta a carta. Gana quien obtenga 2 de las 3 "bazas" (rondas).</li>
+  </ul>
+
+  <h2>El Envido en detalle</h2>
+  <p>El Envido es una jugada que se puede cantar antes de jugar la primera carta. Su objetivo es obtener puntos según la suma de dos cartas del mismo palo, donde los valores numéricos se cuentan hasta el 7. Las figuras (10, 11 y 12) valen 0.</p>
+  <p>Las combinaciones posibles en el Envido son:</p>
+  <ul>
+    <li><strong>Envido:</strong> vale 2 puntos.</li>
+    <li><strong>Real Envido:</strong> vale 3 puntos.</li>
+    <li><strong>Falta Envido:</strong> vale lo que le falte al rival para llegar a 30.</li>
+  </ul>
+  <p>El jugador con mayor puntaje de Envido gana. En caso de empate, gana el mano (el que recibe cartas primero). Se pueden combinar los cantos, por ejemplo: "Envido, Real Envido". Si se aceptan, se suman sus valores; si se rechazan, se otorga 1 punto al que cantó.</p>
+
+  <h2>Jerarquía de cartas (de mayor a menor)</h2>
+  <ol>
+    <li>🗡️ 1 de espadas (el "Ancho de espadas") — Seña: levantar una ceja.</li>
+    <li>🪵 1 de bastos — Seña: cerrar un ojo.</li>
+    <li>🗡️ 7 de espadas — Seña: torcer la boca hacia un lado.</li>
+    <li>💰 7 de oros — Seña: sacar la punta de la lengua.</li>
+    <li>3️⃣ 3 de cualquier palo — Seña: levantar tres dedos.</li>
+    <li>2️⃣ 2 de cualquier palo — Seña: levantar dos dedos.</li>
+    <li>1️⃣ 1 de copas / 1 de oros — Seña: levantar un dedo.</li>
+    <li>👑 12 (Rey) — Seña: mirar hacia arriba.</li>
+    <li>🐴 11 (Caballo) — Seña: mover los labios como relinchando.</li>
+    <li>🃏 10 (Sota) — Seña: tocarse la nariz.</li>
+    <li>7️⃣ 7 de copas / 7 de bastos — Seña: mover la cabeza de lado a lado lentamente.</li>
+    <li>6️⃣ 6 — Seña: mostrar la palma de la mano.</li>
+    <li>5️⃣ 5 — Seña: tocarse el hombro.</li>
+    <li>4️⃣ 4 — Seña: rascarse la cabeza.</li>
+  </ol>
+
+  <h2>Contador de Puntos</h2>
+  <div class="counter">
+    <h3>Puntos</h3>
+    <div id="teams"></div>
+    <button onclick="agregarEquipo()">Agregar Equipo</button>
+    <button onclick="reset()">Reiniciar</button>
+  </div>
+
+</main>
+
+<script>
+  let equipos = [];
+  let equipoId = 0;
+
+  function agregarEquipo() {
+    equipoId++;
+    const equipo = {
+      id: equipoId,
+      nombre: `Equipo ${equipoId}`,
+      puntos: 0
+    };
+    equipos.push(equipo);
+    renderizarEquipos();
+  }
+
+  function cambiarPuntos(id, cantidad) {
+    const equipo = equipos.find(e => e.id === id);
+    if (equipo) {
+      equipo.puntos += cantidad;
+      if (equipo.puntos < 0) equipo.puntos = 0;
+      renderizarEquipos();
+    }
+  }
+
+  function reset() {
+    equipos.forEach(e => e.puntos = 0);
+    renderizarEquipos();
+  }
+
+  function renderizarEquipos() {
+    const contenedor = document.getElementById('teams');
+    contenedor.innerHTML = '';
+    equipos.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'team';
+      div.innerHTML = `
+        <h4>${e.nombre}</h4>
+        <p>Puntos: <span>${e.puntos}</span></p>
+        <button onclick="cambiarPuntos(${e.id}, 1)">+1</button>
+        <button onclick="cambiarPuntos(${e.id}, -1)">-1</button>
+      `;
+      contenedor.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>
